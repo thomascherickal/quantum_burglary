@@ -1,85 +1,17 @@
-import numpy as np
-from qiskit import qiskit as qiskit
-from math import sqrt,log,gcd
-import random
-from random import randint
-import rsa
+# Program to manually encrypt and decrypt a 4-bit RSA cryptographic system.
+# And then crack it using Shor's algorithm and a quantum simulator.
+# Software simulator from IBM Qiskit is used.
+# Original author as a Jupyter Notebook: Smaranjit Ghose
+# Modified into a Python Script: Thomas Cherickal
+# Built a cross-platform UI using Flutter and Dart: Thomas Cherickal
+
+
+from qiskit import qiskit
 from qiskit.circuit import QuantumCircuit, QuantumRegister, ClassicalRegister, register
-from qiskit import BasicAer
-from qiskit import execute
-import sys
+from qiskit import execute, Aer
 
-def mod_inverse(a, m):
-    for x in range(1, m):
-        if (a * x) % m == 1:
-            return x
-    return -1
-
-def isprime(n):
-    if n < 2:
-        return False
-    elif n == 2:
-        return True
-    else:
-        for i in range(1, int(sqrt(n)) + 1):
-            if n % i == 0:
-                return False
-    return True
-
-def generate_keypair(keysize):
-    p = randint(1, 1000)
-    q = randint(1, 1000)
-    nMin = 1 << (keysize - 1)
-    nMax = (1 << keysize) - 1
-    primes = [2]
-    start = 1 << (keysize // 2 - 1)
-    stop = 1 << (keysize // 2 + 1)
-    if start >= stop:
-        return []
-    for i in range(3, stop + 1, 2):
-        for p in primes:
-            if i % p == 0:
-                break
-        else:
-            primes.append(i)
-    while (primes and primes[0] < start):
-        del primes[0]
-    # Select two random prime numbers p and q
-    while primes:
-        p = random.choice(primes)
-        primes.remove(p)
-        q_values = [q for q in primes if nMin <= p * q <= nMax]
-        if q_values:
-            q = random.choice(q_values)
-            break
-    # Calculate n
-    n = p * q
-    # Calculate phi
-    phi = (p - 1) * (q - 1)
-    # Select e
-    e = random.randrange(1, phi)
-    g = gcd(e, phi)
-    # Calculate d
-    while True:
-        e = random.randrange(1, phi)
-        g = gcd(e, phi)
-        d = mod_inverse(e, phi)
-        if g == 1 and e != d:
-            break
-
-    return ((e, n), (d, n))
-
-
-def encrypt(plaintext, package):
-    e, n = package
-    ciphertext = [pow(ord(c), e, n) for c in plaintext]
-    return ''.join(map(lambda x: str(x), ciphertext)), ciphertext
-
-
-def decrypt(ciphertext, package):
-    d, n = package
-    plaintext = [chr(pow(c, d, n)) for c in ciphertext]
-    return (''.join(plaintext))
+from DecryptRSA import decrypt
+from EncryptRSA import encrypt
 
 
 
@@ -163,18 +95,17 @@ def modular_inverse(a,m):
     return 1
 
 
-# Passed two command line arguments
-# 1. bit_length
-# 2. plain_text
+# Passed one command line argument
+# 1. cipher_text
 def main(argv):
     
     pos = len(argv)
 
-    bit_length =  int(argv[1])
+    bit_length =  4
     
     public_k, private_k = generate_keypair(2**bit_length)
     
-    plain_txt = argv[2]
+    plain_txt = argv[]
     
     cipher_txt, cipher_obj = encrypt(plain_txt, public_k)
     
@@ -183,8 +114,6 @@ def main(argv):
     print("Decrypted message: {}".format(decrypt(cipher_obj, private_k)))
     
     N_shor = public_k[1]
-    
-    assert N_shor>0,"Input must be positive"
     
     p,q = shors_breaker(N_shor)
 
@@ -195,7 +124,9 @@ def main(argv):
     # # Lets Crack our Cipher Text using Shor's Algorithm
     print('Message Cracked using Shors Algorithm:')
          
-    print(decrypt(cipher_obj, (d_shor,N_shor)))
+    hackedMessage = (decrypt(cipher_obj, (d_shor,N_shor)))
+    
+    return hackedMessage
 
 
 
