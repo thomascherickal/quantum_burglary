@@ -10,8 +10,9 @@ from qiskit import qiskit
 from qiskit.circuit import QuantumCircuit, QuantumRegister, ClassicalRegister, register
 from qiskit import execute, Aer
 
-from DecryptRSA import decrypt
-from EncryptRSA import encrypt
+from DecryptRSA import decryptRSA
+from DecryptRSA import 
+from EncryptRSA import generate_keypair
 
 
 
@@ -107,11 +108,11 @@ def main(argv):
     
     plain_txt = argv[]
     
-    cipher_txt, cipher_obj = encrypt(plain_txt, public_k)
+    cipher_txt, cipher_obj = encryptRSA(plain_txt, public_k)
     
     print("Encrypted message: {}".format(cipher_txt))
     
-    print("Decrypted message: {}".format(decrypt(cipher_obj, private_k)))
+    print("Decrypted message: {}".format(decryptRSA(cipher_obj, private_k)))
     
     N_shor = public_k[1]
     
@@ -124,7 +125,7 @@ def main(argv):
     # # Lets Crack our Cipher Text using Shor's Algorithm
     print('Message Cracked using Shors Algorithm:')
          
-    hackedMessage = (decrypt(cipher_obj, (d_shor,N_shor)))
+    hackedMessage = (decryptRSA(cipher_obj, (d_shor,N_shor)))
     
     return hackedMessage
 
