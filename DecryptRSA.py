@@ -67,18 +67,13 @@ class Decrypt(object):
 
         return ((e, n), (d, n))
 
-
-
     def decrypt(self, ciphertext, package):
         d, n = package
         plaintext = [chr(pow(c, d, n)) for c in ciphertext]
         return (''.join(plaintext))
 
     def main(self, argv):
-        return self.decrypt(argv[1])
-
-    if __name__ == '__DecryptRSA__':
-        main(sys.argv)
-        
-        
-
+        retVal = self.decrypt(argv[1])
+        print(retVal)
+        return retVal
+     

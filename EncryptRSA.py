@@ -68,15 +68,12 @@ class Encrypt(object):
         return ((e, n), (d, n))
 
 
-    def encryptRSA(self, plaintext, package):
+    def encrypt(self, plaintext, package):
         e, n = package
         ciphertext = [pow(ord(c), e, n) for c in plaintext]
         return ''.join(map(lambda x: str(x), ciphertext)), ciphertext
 
     def main(self, argv):
-        return self.encrypt(argv[1])
-
-if __name__ == '__EncryptRSA__':
-    main(sys.argv)
-        
-        
+        retVal = self.encrypt(argv[1])
+        print(retVal)
+        return retVal
